@@ -4,6 +4,7 @@
 #include <iomanip>
 
 std::string parseUserInput();
+std::string parseNumber(std::string);
 
 void outputEquation(std::string);
 void outputAnswer(std::vector<double>);
@@ -37,16 +38,43 @@ int main(int _argc, char* _argv[]) {
 std::string parseUserInput() {
 	std::string a, b, c;
 
-	std::cout << "a = ";
-	getline(std::cin, a);
-
-	std::cout << "b = ";
-	getline(std::cin, b);
-
-	std::cout << "c = ";
-	getline(std::cin, c);
+	a = parseNumber("a");
+	b = parseNumber("b");
+	c = parseNumber("c");
 
 	return (a + " " + b + " " + c);
+}
+
+std::string parseNumber(std::string number) {
+	std::string input;
+	bool doubleflag = false;
+
+	while (true) {
+
+		try {
+			std::cout << number << " = ";
+			getline(std::cin, input);
+
+			for (auto it : input) {
+				if (!isdigit(it) && (it != '-'))
+				{
+					if ((it == '.') && (!doubleflag))
+						doubleflag = true;
+					else
+						throw std::exception(input.c_str());
+				}
+			}
+
+			break;
+
+		}
+		catch (std::exception excpt) {
+			std::cout << "Error. Expected a valid real nonzero number, got " << excpt.what() << " instead.\n";
+		}
+
+	}
+
+	return input;
 }
 
 //
@@ -76,7 +104,7 @@ void outputAnswer(std::vector<double> roots) {
 		std::cout << "x2 = " << roots[1];
 	}
 	else if (roots.size() == 1) {
-		std::cout << "There are 1 root.\n";
+		std::cout << "There is 1 root.\n";
 		std::cout << "x = " << roots[0];
 	}
 	else {
