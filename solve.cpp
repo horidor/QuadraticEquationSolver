@@ -2,12 +2,9 @@
 #include <sstream>
 #include <vector>
 #include <iomanip>
-#include <fstream>
 
 std::string parseUserInput();
 std::string parseNumber(std::string);
-
-std::string parseFile(std::string);
 
 void outputEquation(std::string);
 void outputAnswer(std::vector<double>);
@@ -17,22 +14,13 @@ std::vector<double> solveEquation(std::string);
 int main(int _argc, char* _argv[]) {
 	std::string input;
 
-	try {
-		if (_argc < 2) {
-			input = parseUserInput();
-		}
-		else if (_argc == 2)
-		{
-			input = parseFile(std::string(_argv[1]));
-		}
-		else
-		{
-			throw std::exception("Error: too much arguments in command line");
-		}
+	if (_argc < 2) {
+		input = parseUserInput();
 	}
-	catch (std::exception excpt) {
-		std::cout << excpt.what();
-		return EXIT_FAILURE;
+	else if (_argc >= 2)
+	{
+		for (int i = 1; i < _argc; i++)
+			std::cout << _argv[i] << std::endl;
 	}
 
 	outputEquation(input);
@@ -67,8 +55,6 @@ std::string parseNumber(std::string number) {
 			std::cout << number << " = ";
 			getline(std::cin, input);
 
-			if ((number == "a") && (stod(input) == 0.0f)) throw std::exception("a = 0");
-
 			for (auto it : input) {
 				if (!isdigit(it) && (it != '-'))
 				{
@@ -83,55 +69,9 @@ std::string parseNumber(std::string number) {
 
 		}
 		catch (std::exception excpt) {
-			std::cout << "Error. Expected a valid real number, got " << excpt.what() << " instead.\n";
+			std::cout << "Error. Expected a valid real nonzero number, got " << excpt.what() << " instead.\n";
 		}
 
-	}
-
-	return input;
-}
-
-//
-// Parsing file
-//
-
-std::string parseFile(std::string filename) {
-	std::string input, check;
-	std::stringstream checkinput;
-
-	std::fstream file(filename, std::ios::in);
-	if (file.fail()) {
-		throw std::exception(("Error: file " + filename + " doesn't exist").c_str());
-	}
-
-	getline(file, input);
-	checkinput.str(input);
-	
-	file >> check;
-
-	if (check != "") {
-		throw std::exception("Error: incorrect file format.");
-	}
-
-	double number;
-
-	checkinput >> number;
-	if (!checkinput.bad()) {
-		if (number == 0.0f) {
-			throw std::exception("Error: a is zero");
-		}
-	}
-
-	for (int i = 0; i < 2; i++) {
-		checkinput >> number;
-		if (checkinput.bad()) {
-			throw std::exception("Error: incorrect file format.");
-		}
-	}
-
-	checkinput >> number;
-	if (!checkinput.eof()) {
-		throw std::exception("Error: incorrect file format.");
 	}
 
 	return input;
