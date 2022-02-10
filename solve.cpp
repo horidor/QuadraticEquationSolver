@@ -4,6 +4,10 @@
 #include <iomanip>
 #include <fstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 std::string parseUserInput();
 std::string parseNumber(std::string);
 
@@ -64,13 +68,14 @@ std::string parseNumber(std::string number) {
 	while (true) {
 
 		try {
-			
-			/*system("color 02");
-			std::cout << number << " = ";
-			getline(std::cin, input);
-			system("color 07");*/
 
-		#ifndef _WIN32
+		#ifdef _WIN32
+			HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+			std::cout << number << " = ";
+			SetConsoleTextAttribute(console, FOREGROUND_GREEN);
+			getline(std::cin, input);
+			SetConsoleTextAttribute(console, 7);
+		#elif __unix__
 			std::cout << number << " = \x1B[0;32m";
 			getline(std::cin, input);
 			std::cout << "\x1B[0m";
