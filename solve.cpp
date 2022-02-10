@@ -185,7 +185,7 @@ void outputAnswer(std::vector<double> roots) {
 	if (roots.size() == 2) {
 		std::cout << "There are 2 roots.\n";
 		std::cout << "x1 = " << roots[0] << "\n";
-		std::cout << "x2 = " << roots[1];
+		std::cout << "x2 = " << roots[1] << "\n";
 	}
 	else if (roots.size() == 1) {
 		std::cout << "There is 1 root.\n";
