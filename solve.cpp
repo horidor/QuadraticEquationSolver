@@ -3,6 +3,12 @@
 #include <vector>
 #include <iomanip>
 #include <fstream>
+#include <cmath>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 
 #ifdef _WIN32
 #include <windows.h>
