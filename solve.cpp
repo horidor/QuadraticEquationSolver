@@ -9,11 +9,6 @@
 #include <windows.h>
 #endif
 
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 std::string parseUserInput();
 std::string parseNumber(std::string);
 
