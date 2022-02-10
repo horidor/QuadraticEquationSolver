@@ -27,10 +27,10 @@ int main(int _argc, char* _argv[]) {
 		}
 		else
 		{
-			throw std::exception("Error: too much arguments in command line");
+			throw std::runtime_error("Error: too much arguments in command line");
 		}
 	}
-	catch (std::exception excpt) {
+	catch (std::runtime_error excpt) {
 		std::cout << excpt.what();
 		return EXIT_FAILURE;
 	}
@@ -64,10 +64,23 @@ std::string parseNumber(std::string number) {
 	while (true) {
 
 		try {
+			
+			/*system("color 02");
 			std::cout << number << " = ";
 			getline(std::cin, input);
+			system("color 07");*/
 
-			if ((number == "a") && (stod(input) == 0.0f)) throw std::exception("a = 0");
+		#ifndef _WIN32
+			std::cout << number << " = \x1B[0;32m";
+			getline(std::cin, input);
+			std::cout << "\x1B[0m";
+		#else
+			std::cout << number << " = ";
+			getline(std::cin, input);
+		#endif 
+			
+
+			if ((number == "a") && (stod(input) == 0.0f)) throw std::runtime_error("a = 0");
 
 			for (auto it : input) {
 				if (!isdigit(it) && (it != '-'))
@@ -75,14 +88,14 @@ std::string parseNumber(std::string number) {
 					if ((it == '.') && (!doubleflag))
 						doubleflag = true;
 					else
-						throw std::exception(input.c_str());
+						throw std::runtime_error(input.c_str());
 				}
 			}
 
 			break;
 
 		}
-		catch (std::exception excpt) {
+		catch (std::runtime_error excpt) {
 			std::cout << "Error. Expected a valid real number, got " << excpt.what() << " instead.\n";
 		}
 
@@ -101,7 +114,7 @@ std::string parseFile(std::string filename) {
 
 	std::fstream file(filename, std::ios::in);
 	if (file.fail()) {
-		throw std::exception(("Error: file " + filename + " doesn't exist").c_str());
+		throw std::runtime_error(("Error: file " + filename + " doesn't exist").c_str());
 	}
 
 	getline(file, input);
@@ -110,7 +123,7 @@ std::string parseFile(std::string filename) {
 	file >> check;
 
 	if (check != "") {
-		throw std::exception("Error: incorrect file format.");
+		throw std::runtime_error("Error: incorrect file format.");
 	}
 
 	double number;
@@ -118,20 +131,20 @@ std::string parseFile(std::string filename) {
 	checkinput >> number;
 	if (!checkinput.bad()) {
 		if (number == 0.0f) {
-			throw std::exception("Error: a is zero");
+			throw std::runtime_error("Error: a is zero");
 		}
 	}
 
 	for (int i = 0; i < 2; i++) {
 		checkinput >> number;
 		if (checkinput.bad()) {
-			throw std::exception("Error: incorrect file format.");
+			throw std::runtime_error("Error: incorrect file format.");
 		}
 	}
 
 	checkinput >> number;
 	if (!checkinput.eof()) {
-		throw std::exception("Error: incorrect file format.");
+		throw std::runtime_error("Error: incorrect file format.");
 	}
 
 	return input;
@@ -148,7 +161,7 @@ void outputEquation(std::string coefficients) {
 	std::cout << "Equation is: ";
 	
 	equationStream >> number;
-	std::cout << "(" << number << ") x^2 + ";
+	std::cout << "(" << number << "\33[0m) x^2 + ";
 
 	equationStream >> number;
 	std::cout << "(" << number << ") x + ";
