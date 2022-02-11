@@ -32,10 +32,10 @@ int main(int _argc, char* _argv[]) {
 		}
 		else
 		{
-			throw std::runtime_error("Error: too much arguments in command line");
+			throw std::logic_error("Error: too much arguments in command line");
 		}
 	}
-	catch (std::runtime_error excpt) {
+	catch (std::logic_error excpt) {
 		std::cout << excpt.what();
 		return EXIT_FAILURE;
 	}
@@ -85,23 +85,24 @@ std::string parseNumber(std::string number) {
 			getline(std::cin, input);
 		#endif 
 			
-
-			if ((number == "a") && (stod(input) == 0.0f)) throw std::runtime_error("a = 0");
-
 			for (auto it : input) {
 				if (!isdigit(it) && (it != '-'))
 				{
 					if ((it == '.') && (!doubleflag))
 						doubleflag = true;
 					else
-						throw std::runtime_error(input.c_str());
+						throw std::logic_error(input.c_str());
 				}
 			}
+
+			if ((number == "a") && (stod(input) == 0.0f)) throw std::logic_error("a = 0");
+
+			
 
 			break;
 
 		}
-		catch (std::runtime_error excpt) {
+		catch (std::logic_error excpt) {
 			std::cout << "Error. Expected a valid real number, got " << excpt.what() << " instead.\n";
 		}
 
@@ -120,7 +121,7 @@ std::string parseFile(std::string filename) {
 
 	std::fstream file(filename, std::ios::in);
 	if (file.fail()) {
-		throw std::runtime_error(("Error: file " + filename + " doesn't exist").c_str());
+		throw std::logic_error(("Error: file " + filename + " doesn't exist").c_str());
 	}
 
 	getline(file, input);
@@ -129,7 +130,7 @@ std::string parseFile(std::string filename) {
 	file >> check;
 
 	if (check != "") {
-		throw std::runtime_error("Error: incorrect file format.");
+		throw std::logic_error("Error: incorrect file format.");
 	}
 
 	double number;
@@ -137,20 +138,20 @@ std::string parseFile(std::string filename) {
 	checkinput >> number;
 	if (!checkinput.bad()) {
 		if (number == 0.0f) {
-			throw std::runtime_error("Error: a is zero");
+			throw std::logic_error("Error: a is zero");
 		}
 	}
 
 	for (int i = 0; i < 2; i++) {
 		checkinput >> number;
 		if (checkinput.bad()) {
-			throw std::runtime_error("Error: incorrect file format.");
+			throw std::logic_error("Error: incorrect file format.");
 		}
 	}
 
 	checkinput >> number;
 	if (!checkinput.eof()) {
-		throw std::runtime_error("Error: incorrect file format.");
+		throw std::logic_error("Error: incorrect file format.");
 	}
 
 	return input;
