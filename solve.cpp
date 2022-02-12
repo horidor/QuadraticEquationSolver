@@ -168,7 +168,7 @@ void outputEquation(std::string coefficients) {
 	std::cout << "Equation is: ";
 	
 	equationStream >> number;
-	std::cout << "(" << number << "\33[0m) x^2 + ";
+	std::cout << "(" << number << ") x^2 + ";
 
 	equationStream >> number;
 	std::cout << "(" << number << ") x + ";
