@@ -136,22 +136,27 @@ std::string parseFile(std::string filename) {
 	double number;
 
 	checkinput >> number;
-	if (!checkinput.bad()) {
+	if (!checkinput.fail()) {
 		if (number == 0.0f) {
 			throw std::logic_error("Error: a is zero");
 		}
 	}
+	else {
+		throw std::logic_error("Error: incorrect file format");
+	}
 
 	for (int i = 0; i < 2; i++) {
 		checkinput >> number;
-		if (checkinput.bad()) {
+		if (checkinput.fail()) {
 			throw std::logic_error("Error: incorrect file format.");
 		}
 	}
 
-	checkinput >> number;
-	if (!checkinput.eof()) {
-		throw std::logic_error("Error: incorrect file format.");
+	if (!checkinput.fail()) {
+		checkinput >> number;
+		if (!checkinput.fail()) {
+			throw std::logic_error("Error: incorrect file format.");
+		}
 	}
 
 	return input;
